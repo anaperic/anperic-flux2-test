@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb-service
+  namespace: default
+spec:
+  selector:
+    app: nginx-lb
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-lb
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nginx-lb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-lb
+    spec:
+      containers:
+      - name: nginx
+        image: 302278014198.dkr.ecr.us-west-2.amazonaws.com/mirror/nginx:latest
+        ports:
+        - containerPort: 80
+
+
